@@ -1,0 +1,30 @@
+<div ng-controller='IndexCtrl'>
+  <h1 class="cover-heading">Fill Out What You Know</h1>
+  <p class="lead">
+    <form role="form" name='form'>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" ng-model="data.email" id='email' name='email' placeholder="john.doe@gmail.com"
+            ng-required='!(data.first_name && data.last_name)'>
+      </div>
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" class="form-control" ng-model="data.first_name" id='first_name' placeholder="John" ng-required='!data.email'>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" class="form-control" ng-model="data.last_name" id='last_name' placeholder="Doe" ng-required='!data.email'>
+      </div>
+      <div class="form-group">
+        <label for="domains">Additional Domains</label>
+        <input type="text" class="form-control" ng-model="data.domains" id='domains' placeholder="doe.com, johndoe.com">
+      </div>
+    </form>
+  </p>
+  <p class="lead">
+    <a id='submit_btn' class="btn btn-lg" ng-class="{'btn-default': form.$invalid, 'btn-info': form.$valid}"
+        ng-disabled='form.$invalid' ng-click='submit()'>
+      Find Them
+    </a>
+  </p>
+</div>
