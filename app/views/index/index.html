@@ -31,7 +31,7 @@
     <p class="lead">
       <a id='submit_btn' class="btn btn-lg" ng-class="{'btn-default': form.$invalid, 'btn-info': form.$valid}"
           ng-disabled='form.$invalid' ng-click='submit()'>
-        Find Them
+        Find <span ng-hide='data.first_name'>Them</span><span ng-show='data.first_name'>{{data.first_name}} {{data.last_name}}</span>
       </a>
     </p>
   </div>

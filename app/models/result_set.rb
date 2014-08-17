@@ -85,7 +85,11 @@ class ResultSet < ActiveRecord::Base
   end
 
   def get_results_from_name
-    results = PossibleEmail.search(first_name, last_name, domains)
+    begin
+      results = PossibleEmail.search(first_name, last_name, domains)
+    rescue
+      results = []
+    end
     format_results results
   end
 
