@@ -81,7 +81,7 @@ class ResultSet < ActiveRecord::Base
 
   def get_results_from_email
     results = PossibleEmail.find_profile(email)
-    results.empty? ? errored_results(404) : format_results results
+    results.present? ? format_results(results) : errored_results(404)
   end
 
   def get_results_from_name
