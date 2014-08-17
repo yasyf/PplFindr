@@ -86,7 +86,7 @@ class ResultSet < ActiveRecord::Base
 
   def get_results_from_name
     begin
-      results = PossibleEmail.search(first_name, last_name, domains)
+      results = PossibleEmail.search(first_name.gsub(/[^a-z]/i, ''), last_name.gsub(/[^a-z]/i, ''), domains)
     rescue
       results = []
       error = 500
