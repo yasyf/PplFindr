@@ -119,16 +119,21 @@ class ResultSet < ActiveRecord::Base
   def format_results(results)
     if results.respond_to? :each
       results.to_a.map! do |result|
-        result = ResultSet.result_to_h(result)
-        result['image'] = get_image(result)
-        if result['name'] == full_name
-          [2, result]
-        elsif result['first_name'] == first_name || result['last_name'] == last_name
-          [1, result]
+        email_components = result.email.split('@')
+        if email_components.first.length == 1 && default_domains.include?(email_components.last)
+          nil
         else
-          [0, result]
+          result = ResultSet.result_to_h(result)
+          result['image'] = get_image(result)
+          if result['name'] == full_name
+            [2, result]
+          elsif result['first_name'] == first_name || result['last_name'] == last_name
+            [1, result]
+          else
+            [0, result]
+          end
         end
-      end
+      end.compact
     else
       result = ResultSet.result_to_h(results)
       result['image'] = get_image(result)
