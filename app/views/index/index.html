@@ -1,30 +1,75 @@
 <div ng-controller='IndexCtrl'>
-  <h1 class="cover-heading">Fill Out What You Know</h1>
-  <p class="lead">
-    <form role="form" name='form'>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" ng-model="data.email" id='email' name='email' placeholder="john.doe@gmail.com"
-            ng-required='!(data.first_name && data.last_name)'>
+  <div ng-show='loading'>
+    <p style='text-center'>Searching...</p>
+    <div class='progress'>
+      <div class="progress-bar progress-bar-striped active" role="progressbar" ng-style="{'width': progress + '%'}"></div>
+    </div>
+  </div>
+  <div ng-hide='results || loading'>
+    <h1 class="cover-heading">Fill Out What You Know</h1>
+    <p class="lead">
+      <form role="form" name='form'>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" ng-model="data.email" id='email' name='email' placeholder="john.doe@gmail.com"
+              ng-required='!(data.first_name && data.last_name)'>
+        </div>
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input type="text" class="form-control" ng-model="data.first_name" id='first_name' placeholder="John" ng-required='!data.email'>
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input type="text" class="form-control" ng-model="data.last_name" id='last_name' placeholder="Doe" ng-required='!data.email'>
+        </div>
+        <div class="form-group">
+          <label for="domains">Additional Domains</label>
+          <input type="text" class="form-control" ng-model="data.domains" id='domains' placeholder="doe.com, johndoe.com">
+        </div>
+      </form>
+    </p>
+    <p class="lead">
+      <a id='submit_btn' class="btn btn-lg" ng-class="{'btn-default': form.$invalid, 'btn-info': form.$valid}"
+          ng-disabled='form.$invalid' ng-click='submit()'>
+        Find Them
+      </a>
+    </p>
+  </div>
+  <div ng-show='results' ng-hide='loading'>
+    <div class="panel" ng-repeat='result in results | orderBy:resultSort'
+        ng-class="{'panel-success': result[0] == 2, 'panel-info': result[0] == 1, 'panel-warning': result[0] == 0}">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{result[1].name}} <span ng-show='result[1].location'({{result[1].location}})></span></h3>
       </div>
-      <div class="form-group">
-        <label for="first_name">First Name</label>
-        <input type="text" class="form-control" ng-model="data.first_name" id='first_name' placeholder="John" ng-required='!data.email'>
+      <div class="panel-body">
+          <div class="media block-update-card">
+            <a class="pull-left" href="#">
+              <img class="media-object update-card-MDimentions"
+                  ng-src="{{ result[1].image }}">
+            </a>
+            <div class="media-body update-card-body">
+              <h4 class="media-heading">{{result[1].headline}}</h4>
+              <div ng-show='result[1].occupations.length > 0'>
+                <p ng-repeat='occupation in result[1].occupations | limitTo:3' style='margin-bottom: 5px;'>
+                  {{occupation.job_title}} at {{occupation.company}}
+                </p>
+              </div>
+              <a ng-show='result[1].email' class='btn btn-sm btn-info' ng-href="mailto:{{result[1].email}}" style='width: 55%;'>
+                {{result[1].email}}
+              </a>
+              <a ng-show='result[1].phones[0]' class='btn btn-sm btn-info' ng-href="tel:{{result[1].phones[0]}}" style='width: 55%;'>
+                {{result[1].phones[0]}}
+              </a>
+              <div class="btn-toolbar card-body-social" role="toolbar" style='margin-left: auto; margin-right: auto;'
+                  ng-style="{'width': items.length * 45 + 'px'}" ng-repeat="items in result[1].socialItems">
+                <a ng-href="{{item.url}}" ng-repeat="item in items" target="_blank" title="{{item.user}} on {{item.name}}"
+                    data-toggle="tooltip" class='ttip'>
+                  <span ng-class="item.class" ng-href="item.url" ></span>
+                </a>
+              </div>
+            </div>
+          </div>
       </div>
-      <div class="form-group">
-        <label for="last_name">Last Name</label>
-        <input type="text" class="form-control" ng-model="data.last_name" id='last_name' placeholder="Doe" ng-required='!data.email'>
-      </div>
-      <div class="form-group">
-        <label for="domains">Additional Domains</label>
-        <input type="text" class="form-control" ng-model="data.domains" id='domains' placeholder="doe.com, johndoe.com">
-      </div>
-    </form>
-  </p>
-  <p class="lead">
-    <a id='submit_btn' class="btn btn-lg" ng-class="{'btn-default': form.$invalid, 'btn-info': form.$valid}"
-        ng-disabled='form.$invalid' ng-click='submit()'>
-      Find Them
-    </a>
-  </p>
+    </div>
+  </div>
 </div>
