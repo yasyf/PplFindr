@@ -9,7 +9,7 @@ class ResultSet < ActiveRecord::Base
   def domains=(v)
     domains = v | default_domains
     self[:domains] = domains
-    self[:domain_hash] = Digest::MD5.hexdigest(domains.sort.join(','))
+    self[:domain_hash] = ResultSet.domain_hash(domains)
   end
 
   def first_name=(v)
@@ -47,12 +47,17 @@ class ResultSet < ActiveRecord::Base
       result_set = ResultSet.new params
       result_set.save!
     rescue ActiveRecord::RecordInvalid
-      result_set = ResultSet.first_or_create params
+      search = {first_name: result_set.first_name, last_name: result_set.last_name, email: result_set.email, domain_hash: result_set.domain_hash}
+      result_set = ResultSet.where(search).first
     end
     result_set
   end
 
   private
+
+  def self.domain_hash(domains)
+    Digest::MD5.hexdigest(domains.sort.join(','))
+  end
 
   def get_image(data)
     data['images'].each do |image|

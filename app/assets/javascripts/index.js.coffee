@@ -1,10 +1,13 @@
 PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope, $timeout, $interval) ->
-  $scope.data = {}
-  $scope.loading = false
-  $scope.progress = 1
-  $scope.results = undefined
-  $scope.buttonClass = 'btn-default'
-  $scope.disabled = true
+
+  reset = (keep_data) ->
+    $scope.data = {} unless keep_data
+    $scope.loading = false
+    $scope.progress = 1
+    $scope.results = undefined
+    $scope.disabled = true
+
+  reset(false)
   $scope.resultSort = (item) -> -item[0]
 
   getIconClass = (name) ->
@@ -43,5 +46,7 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope,
       $timeout ->
         $('.ttip').tooltip()
       , 1000
+
+  $scope.reset = -> reset(true)
 
 ]

@@ -35,7 +35,7 @@
       </a>
     </p>
   </div>
-  <div ng-show='results' ng-hide='loading'>
+  <div ng-hide='loading || !results'>
     <div class="panel" ng-repeat='result in results | orderBy:resultSort'
         ng-class="{'panel-success': result[0] == 2, 'panel-info': result[0] == 1, 'panel-warning': result[0] == 0}">
       <div class="panel-heading">
@@ -71,5 +71,8 @@
           </div>
       </div>
     </div>
+    <a class="btn btn-lg btn-info" ng-click='reset()'>
+      Find Someone Else
+    </a>
   </div>
 </div>
