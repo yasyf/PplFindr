@@ -119,11 +119,11 @@ body {
   }
 }
 
-.panel {
+.panel, .modal-content {
   text-shadow: none;
 }
 
-.panel-body {
+.panel-body, .modal-content {
   color: gray;
 }
 

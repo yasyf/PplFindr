@@ -1,4 +1,4 @@
-PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', '$location', ($scope, $timeout, $interval, $location) ->
+PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', '$location', '$modal', ($scope, $timeout, $interval, $location, $modal) ->
 
   reset = (keep_data) ->
     $location.search('go', false) if keep_data
@@ -11,7 +11,7 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', '$locati
   reset(false)
 
   $scope.$watch 'data', (data) ->
-    $location.search('data', $.param(data))
+    $location.search('data', btoa($.param(data)))
   , true
 
   $scope.resultSort = (item) -> -item[0]
@@ -56,8 +56,26 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', '$locati
 
   $scope.reset = -> reset(true)
 
-  $scope.data = $.deparam($location.search().data, true) if $location.search().data
-  if $location.search().go is true
-    $scope.submit()
+  $scope.shorten = ->
+    url = encodeURIComponent($location.absUrl())
+    $.get("https://api-ssl.bitly.com/v3/shorten?access_token=c1358035bc401ff7a8306fde6e969f94659412cc&domain=j.mp&longUrl=#{url}")
+    .then (response) ->
+      shortUrl = response.data.url
+      $modal.open
+        templateUrl: 'shorten_modal.html'
+        controller: 'ShortenModalCtrl'
+        resolve:
+          url: -> shortUrl
 
+  try
+    $scope.data = $.deparam(atob($location.search().data), true) if $location.search().data
+    if $location.search().go is true
+      $scope.submit()
+  catch e
+    console.error e.toString()
+
+]
+
+PeopleFindr.controller 'ShortenModalCtrl', ['$scope', 'url', ($scope, url) ->
+  $scope.url = url
 ]

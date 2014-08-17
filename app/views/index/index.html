@@ -74,5 +74,21 @@
     <a class="btn btn-lg btn-info" ng-click='reset()'>
       Find Someone Else
     </a>
+    <a class="btn btn-lg btn-info" ng-click='shorten()'>
+      Save This Page
+    </a>
   </div>
 </div>
+
+<script type="text/ng-template" id="shorten_modal.html">
+  <div class="modal-header">
+      <h3 class="modal-title">Short Link</h3>
+  </div>
+  <div class="modal-body">
+      <p>Use the following link to return to this page</p>
+       <input type="text" class="form-control" ng-model='url' onfocus='this.select()' autofocus readonly>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="$close()">Close</button>
+  </div>
+</script>

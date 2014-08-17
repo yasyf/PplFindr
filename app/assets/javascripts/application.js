@@ -14,6 +14,6 @@
 //= require_self
 //= require_tree .
 
-PeopleFindr = angular.module('PeopleFindr', [])
+var PeopleFindr = angular.module('PeopleFindr', ['ui.bootstrap']);
 
 
