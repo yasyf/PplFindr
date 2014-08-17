@@ -38,7 +38,7 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope,
       $timeout ->
         $interval.cancel(interval)
         $scope.results = _.map results, (result) ->
-          result[1].socialItems = getSocialItems(result[1].memberships, result[1].first_name.toLowerCase())
+          result[1].socialItems = getSocialItems(result[1].memberships, result[1].first_name?.toLowerCase())
           result
       $timeout ->
         $scope.loading = false

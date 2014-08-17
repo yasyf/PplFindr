@@ -89,8 +89,31 @@ class ResultSet < ActiveRecord::Base
       results = PossibleEmail.search(first_name, last_name, domains)
     rescue
       results = []
+      error = 500
     end
-    format_results results
+    if results.empty?
+      error ||= 404
+      errored_results(error)
+    else
+      format_results results
+    end
+  end
+
+  def errored_results(error)
+    result = {
+      'error' => error,
+      'name' => 'Error',
+      'location' => error == 404 ? 'No Results Found' : 'Server Error',
+      'image' => "http://placehold.it/200&text=X",
+      'headline' => 'No matches were found for this person.',
+      'occupations' => [
+        {
+          'job_title' => 'Please provide us with more information, or try again',
+          'company' => 'a later date!'
+        }
+      ]
+    }
+    [[-1, result]]
   end
 
   def format_results(results)
