@@ -1,6 +1,7 @@
-PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope, $timeout, $interval) ->
+PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', '$location', ($scope, $timeout, $interval, $location) ->
 
   reset = (keep_data) ->
+    $location.search('go', false) if keep_data
     $scope.data = {} unless keep_data
     $scope.loading = false
     $scope.progress = 1
@@ -8,6 +9,11 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope,
     $scope.disabled = true
 
   reset(false)
+
+  $scope.$watch 'data', (data) ->
+    $location.search('data', $.param(data))
+  , true
+
   $scope.resultSort = (item) -> -item[0]
 
   getIconClass = (name) ->
@@ -42,11 +48,16 @@ PeopleFindr.controller 'IndexCtrl', ['$scope', '$timeout', '$interval', ($scope,
           result
       $timeout ->
         $scope.loading = false
+        $location.search('go', true)
       , 100
       $timeout ->
         $('.ttip').tooltip()
       , 1000
 
   $scope.reset = -> reset(true)
+
+  $scope.data = $.deparam($location.search().data, true) if $location.search().data
+  if $location.search().go is true
+    $scope.submit()
 
 ]

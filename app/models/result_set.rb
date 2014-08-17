@@ -91,11 +91,12 @@ class ResultSet < ActiveRecord::Base
       results = []
       error = 500
     end
+    results = format_results results unless error
     if results.empty?
       error ||= 404
       errored_results(error)
     else
-      format_results results
+      results
     end
   end
 

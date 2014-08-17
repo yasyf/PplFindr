@@ -39,7 +39,7 @@
     <div class="panel" ng-repeat='result in results | orderBy:resultSort'
         ng-class="{'panel-success': result[0] == 2, 'panel-info': result[0] == 1, 'panel-warning': result[0] == 0, 'panel-danger': result[0] == -1}">
       <div class="panel-heading">
-        <h3 class="panel-title">{{result[1].name}} <span ng-show='result[1].location'>({{result[1].location}})</span></h3>
+        <h3 class="panel-title">{{result[1].name || result[1].friendly_name}} <span ng-show='result[1].location'>({{result[1].location}})</span></h3>
       </div>
       <div class="panel-body">
           <div class="media block-update-card">
